@@ -1,7 +1,0 @@
-/Users/sarweshsaurabh/personal/next_job/mdm_mcp_poc/mcp-server/src/main/java/com/mdm/mcp/MCPApplication.java
-/Users/sarweshsaurabh/personal/next_job/mdm_mcp_poc/mcp-server/src/main/java/com/mdm/mcp/api/BotController.java
-/Users/sarweshsaurabh/personal/next_job/mdm_mcp_poc/mcp-server/src/main/java/com/mdm/mcp/api/MCPClientImpl.java
-/Users/sarweshsaurabh/personal/next_job/mdm_mcp_poc/mcp-server/src/main/java/com/mdm/mcp/api/RuleController.java
-/Users/sarweshsaurabh/personal/next_job/mdm_mcp_poc/mcp-server/src/main/java/com/mdm/mcp/config/CorsConfig.java
-/Users/sarweshsaurabh/personal/next_job/mdm_mcp_poc/mcp-server/src/main/java/com/mdm/mcp/model/Rule.java
-/Users/sarweshsaurabh/personal/next_job/mdm_mcp_poc/mcp-server/src/main/java/com/mdm/mcp/service/RuleService.java
