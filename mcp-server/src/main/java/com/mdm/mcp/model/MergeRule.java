@@ -48,6 +48,9 @@ public class MergeRule {
     @Column(name = "survivorship_rules", columnDefinition = "TEXT")
     private String survivorshipRules; // JSON string for survivorship rules
     
+    @Column(name = "company_id", nullable = true)
+    private String companyId; // null = global rule, not null = company-specific rule
+    
     @Column(name = "created_at")
     private LocalDateTime createdAt;
     

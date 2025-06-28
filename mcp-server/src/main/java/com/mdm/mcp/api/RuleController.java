@@ -10,6 +10,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.mdm.mcp.model.MergeRule;
+import com.mdm.mcp.repository.MergeRuleRepository;
+import org.springframework.http.HttpStatus;
+
 @RestController
 @RequestMapping("/api/rules")
 @Slf4j
@@ -17,6 +21,9 @@ public class RuleController {
 
     @Autowired
     private DroolsRuleEngineService droolsRuleEngineService;
+
+    @Autowired
+    private MergeRuleRepository mergeRuleRepository;
 
     /**
      * Find match candidates for entities using Drools rules
@@ -210,5 +217,75 @@ public class RuleController {
         response.put("service", "MCP Rule Engine");
         response.put("droolsAvailable", droolsRuleEngineService.isDroolsAvailable());
         return ResponseEntity.ok(response);
+    }
+
+    /**
+     * Get all rules for a company (global + company-specific)
+     */
+    @GetMapping("")
+    public ResponseEntity<?> getRulesForCompany(@RequestParam(value = "companyId", required = false) String companyId) {
+        try {
+            List<MergeRule> rules;
+            if (companyId == null || companyId.isBlank()) {
+                rules = mergeRuleRepository.findByCompanyIdIsNull(); // global only
+            } else {
+                rules = mergeRuleRepository.findByCompanyIdOrCompanyIdIsNull(companyId);
+            }
+            return ResponseEntity.ok(rules);
+        } catch (Exception e) {
+            log.error("Error fetching rules for company {}: {}", companyId, e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to fetch rules");
+        }
+    }
+
+    /**
+     * Create a new rule (optionally company-specific)
+     */
+    @PostMapping("")
+    public ResponseEntity<?> createRule(@RequestBody MergeRule rule) {
+        try {
+            rule.setId(null); // ensure new
+            rule.setCreatedAt(java.time.LocalDateTime.now());
+            rule.setUpdatedAt(java.time.LocalDateTime.now());
+            MergeRule saved = mergeRuleRepository.save(rule);
+            return ResponseEntity.status(HttpStatus.CREATED).body(saved);
+        } catch (Exception e) {
+            log.error("Error creating rule: {}", e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to create rule");
+        }
+    }
+
+    /**
+     * Update a rule for a company (creates a new entry, marks as default for company)
+     */
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateRuleForCompany(@PathVariable Long id, @RequestBody MergeRule ruleUpdate) {
+        try {
+            // Find the original rule
+            MergeRule original = mergeRuleRepository.findById(id).orElse(null);
+            if (original == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Rule not found");
+            }
+            // Create a new rule entry for the company
+            MergeRule newRule = MergeRule.builder()
+                    .ruleName(ruleUpdate.getRuleName())
+                    .ruleType(ruleUpdate.getRuleType())
+                    .entityType(ruleUpdate.getEntityType())
+                    .priority(ruleUpdate.getPriority())
+                    .isActive(ruleUpdate.getIsActive())
+                    .ruleCondition(ruleUpdate.getRuleCondition())
+                    .ruleAction(ruleUpdate.getRuleAction())
+                    .matchCriteria(ruleUpdate.getMatchCriteria())
+                    .survivorshipRules(ruleUpdate.getSurvivorshipRules())
+                    .companyId(ruleUpdate.getCompanyId())
+                    .createdAt(java.time.LocalDateTime.now())
+                    .updatedAt(java.time.LocalDateTime.now())
+                    .build();
+            MergeRule saved = mergeRuleRepository.save(newRule);
+            return ResponseEntity.ok(saved);
+        } catch (Exception e) {
+            log.error("Error updating rule for company: {}", e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update rule");
+        }
     }
 }

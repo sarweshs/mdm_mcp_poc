@@ -23,4 +23,10 @@ public interface MergeRuleRepository extends JpaRepository<MergeRule, Long> {
     List<MergeRule> findByIsActiveTrueOrderByPriorityAsc();
     
     List<MergeRule> findByEntityTypeAndIsActiveTrueOrderByPriorityAsc(String entityType);
+    
+    List<MergeRule> findByCompanyId(String companyId);
+    
+    List<MergeRule> findByCompanyIdIsNull();
+    
+    List<MergeRule> findByCompanyIdOrCompanyIdIsNull(String companyId);
 } 

@@ -120,7 +120,7 @@ public class EntityMergeController {
             
             log.info("Finding match candidates for {} entities", sampleEntities.size());
             
-            List<MatchCandidate> candidates = ruleEngineService.findMatchCandidates(sampleEntities);
+            List<MatchCandidate> candidates = ruleEngineService.findMatchCandidatesForEntities(sampleEntities);
             
             Map<String, Object> response = new HashMap<>();
             response.put("message", "Match candidates found");
@@ -144,7 +144,7 @@ public class EntityMergeController {
         try {
             log.info("Finding match candidates for {} entities", entities.size());
             
-            List<MatchCandidate> candidates = ruleEngineService.findMatchCandidates(entities);
+            List<MatchCandidate> candidates = ruleEngineService.findMatchCandidatesForEntities(entities);
             
             Map<String, Object> response = new HashMap<>();
             response.put("message", "Match candidates found");

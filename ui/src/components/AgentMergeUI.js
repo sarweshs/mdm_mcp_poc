@@ -242,8 +242,8 @@ const AgentMergeUI = () => {
           <li><code>POST /api/agent-merge/bulk-merge</code> - Perform bulk merge</li>
           <li><code>POST /api/agent-merge/complete-workflow</code> - Execute complete workflow</li>
           <li><code>GET /api/agent-merge/audit-logs</code> - Get recent audit logs</li>
-          <li><code>GET /api/agent-merge/audit-logs/entity/{entityId}</code> - Get entity audit logs</li>
-          <li><code>GET /api/agent-merge/audit-logs/agent/{agentId}</code> - Get agent audit logs</li>
+          <li><code>GET /api/agent-merge/audit-logs/entity/{'{entityId}'}</code> - Get entity audit logs</li>
+          <li><code>GET /api/agent-merge/audit-logs/agent/{'{agentId}'}</code> - Get agent audit logs</li>
         </ul>
       </div>
     </div>

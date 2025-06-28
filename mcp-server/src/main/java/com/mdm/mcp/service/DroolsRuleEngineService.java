@@ -243,7 +243,7 @@ public class DroolsRuleEngineService {
         return executeFallbackMerging(entities);
     }
     
-    public List<MatchCandidate> findMatchCandidates(List<DataEntity> entities) {
+    public List<MatchCandidate> findMatchCandidatesForEntities(List<DataEntity> entities) {
         log.info("Finding match candidates for {} entities", entities.size());
         
         if (!droolsAvailable) {

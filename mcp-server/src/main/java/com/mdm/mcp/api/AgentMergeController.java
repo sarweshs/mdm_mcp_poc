@@ -233,7 +233,7 @@ public class AgentMergeController {
         List<DataEntity> entities = new ArrayList<>();
         
         // Entity 1 - CRM System
-        Map<String, Object> attributes1 = new HashMap<>();
+        Map<String, String> attributes1 = new HashMap<>();
         attributes1.put("firstName", "John");
         attributes1.put("lastName", "Doe");
         attributes1.put("email", "john.doe@email.com");
@@ -253,7 +253,7 @@ public class AgentMergeController {
             .build();
         
         // Entity 2 - ERP System (similar to CRM_001)
-        Map<String, Object> attributes2 = new HashMap<>();
+        Map<String, String> attributes2 = new HashMap<>();
         attributes2.put("firstName", "John");
         attributes2.put("lastName", "Doe");
         attributes2.put("email", "john.doe@email.com");
@@ -274,7 +274,7 @@ public class AgentMergeController {
             .build();
         
         // Entity 3 - Different person
-        Map<String, Object> attributes3 = new HashMap<>();
+        Map<String, String> attributes3 = new HashMap<>();
         attributes3.put("firstName", "Jane");
         attributes3.put("lastName", "Smith");
         attributes3.put("email", "jane.smith@email.com");

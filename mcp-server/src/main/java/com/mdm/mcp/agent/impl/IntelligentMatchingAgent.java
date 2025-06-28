@@ -250,7 +250,7 @@ public class IntelligentMatchingAgent implements MatchingAgent {
     
     private String getAttributeValue(DataEntity entity, String attributeName) {
         if (entity.getAttributes() != null) {
-            return (String) entity.getAttributes().get(attributeName);
+            return entity.getAttributes().get(attributeName);
         }
         return null;
     }
