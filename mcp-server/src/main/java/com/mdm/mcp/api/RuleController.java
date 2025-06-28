@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/rules")
-@CrossOrigin(origins = "http://localhost:3000")
+@RequestMapping("/api/rules")
+@CrossOrigin(originPatterns = "*")
 public class RuleController {
     @Autowired
     private RuleService ruleService;

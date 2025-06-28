@@ -44,3 +44,13 @@ ui/build/
 postgres-data/
 redis-data/
 elasticsearch-data/ 
+# Maven
+target/
+**/target/
+
+# IDE specific files (optional but recommended)
+.idea/
+*.iml
+.classpath
+.project
+.settings/

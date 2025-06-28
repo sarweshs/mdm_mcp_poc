@@ -1,0 +1,100 @@
+package com.mdm.mcp.rules;
+
+import com.mdm.mcp.model.Entity;
+import com.mdm.mcp.model.MergeRule;
+import com.mdm.mcp.service.RuleExecutionContext;
+
+// Match rules for identifying potential duplicate entities
+rule "Exact Name and Email Match"
+    when
+        $entity1: Entity(entityType == "PERSON", 
+                        attributes["email"] != null, 
+                        attributes["fullName"] != null)
+        $entity2: Entity(entityType == "PERSON", 
+                        attributes["email"] != null, 
+                        attributes["fullName"] != null,
+                        entityId != $entity1.entityId,
+                        attributes["email"] == $entity1.attributes["email"],
+                        attributes["fullName"] == $entity1.attributes["fullName"])
+        $context: RuleExecutionContext()
+    then
+        $context.addMatchCandidate($entity1, $entity2, 0.95, "Exact name and email match");
+end
+
+rule "Fuzzy Name Match with High Confidence"
+    when
+        $entity1: Entity(entityType == "PERSON", 
+                        attributes["fullName"] != null,
+                        attributes["email"] != null)
+        $entity2: Entity(entityType == "PERSON", 
+                        attributes["fullName"] != null,
+                        attributes["email"] != null,
+                        entityId != $entity1.entityId,
+                        attributes["email"] == $entity1.attributes["email"])
+        $context: RuleExecutionContext()
+        eval(calculateNameSimilarity($entity1.attributes["fullName"], $entity2.attributes["fullName"]) > 0.8)
+    then
+        $context.addMatchCandidate($entity1, $entity2, 0.85, "Fuzzy name match with same email");
+end
+
+rule "Phone Number Match"
+    when
+        $entity1: Entity(entityType == "PERSON", 
+                        attributes["phoneNumber"] != null)
+        $entity2: Entity(entityType == "PERSON", 
+                        attributes["phoneNumber"] != null,
+                        entityId != $entity1.entityId,
+                        attributes["phoneNumber"] == $entity1.attributes["phoneNumber"])
+        $context: RuleExecutionContext()
+    then
+        $context.addMatchCandidate($entity1, $entity2, 0.90, "Phone number match");
+end
+
+rule "Company Name and Address Match"
+    when
+        $entity1: Entity(entityType == "ORGANIZATION", 
+                        attributes["companyName"] != null,
+                        attributes["address"] != null)
+        $entity2: Entity(entityType == "ORGANIZATION", 
+                        attributes["companyName"] != null,
+                        attributes["address"] != null,
+                        entityId != $entity1.entityId,
+                        attributes["companyName"] == $entity1.attributes["companyName"],
+                        attributes["address"] == $entity1.attributes["address"])
+        $context: RuleExecutionContext()
+    then
+        $context.addMatchCandidate($entity1, $entity2, 0.92, "Company name and address match");
+end
+
+rule "SSN Match"
+    when
+        $entity1: Entity(entityType == "PERSON", 
+                        attributes["ssn"] != null)
+        $entity2: Entity(entityType == "PERSON", 
+                        attributes["ssn"] != null,
+                        entityId != $entity1.entityId,
+                        attributes["ssn"] == $entity1.attributes["ssn"])
+        $context: RuleExecutionContext()
+    then
+        $context.addMatchCandidate($entity1, $entity2, 0.98, "SSN match");
+end
+
+// Helper function for name similarity calculation
+function double calculateNameSimilarity(String name1, String name2) {
+    if (name1 == null || name2 == null) return 0.0;
+    
+    String[] words1 = name1.toLowerCase().split("\\s+");
+    String[] words2 = name2.toLowerCase().split("\\s+");
+    
+    int matches = 0;
+    for (String word1 : words1) {
+        for (String word2 : words2) {
+            if (word1.equals(word2) || word1.contains(word2) || word2.contains(word1)) {
+                matches++;
+                break;
+            }
+        }
+    }
+    
+    return (double) matches / Math.max(words1.length, words2.length);
+} 

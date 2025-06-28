@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import EntityMergeUI from './components/EntityMergeUI';
 
 function App() {
+  const [activeTab, setActiveTab] = useState('entity-merge');
   const [rules, setRules] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -10,7 +12,7 @@ function App() {
     setLoading(true);
     setError(null);
     try {
-      const response = await axios.get('http://localhost:8080/rules');
+      const response = await axios.get('http://localhost:8080/api/rules');
       setRules(response.data);
     } catch (err) {
       console.error('Error fetching rules:', err);
@@ -20,7 +22,7 @@ function App() {
     }
   };
 
-  return (
+  const RulesTab = () => (
     <div style={{ padding: '20px' }}>
       <h1>MCP Steward Dashboard</h1>
       <button 
@@ -72,6 +74,53 @@ function App() {
           </ul>
         </div>
       )}
+    </div>
+  );
+
+  return (
+    <div>
+      <div style={{
+        backgroundColor: '#f8f9fa',
+        borderBottom: '1px solid #dee2e6',
+        padding: '0 20px'
+      }}>
+        <div style={{
+          display: 'flex',
+          gap: '0'
+        }}>
+          <button
+            onClick={() => setActiveTab('entity-merge')}
+            style={{
+              padding: '15px 30px',
+              fontSize: '16px',
+              backgroundColor: activeTab === 'entity-merge' ? '#007bff' : 'transparent',
+              color: activeTab === 'entity-merge' ? 'white' : '#007bff',
+              border: 'none',
+              cursor: 'pointer',
+              borderBottom: activeTab === 'entity-merge' ? '3px solid #007bff' : '3px solid transparent'
+            }}
+          >
+            Entity Merge
+          </button>
+          <button
+            onClick={() => setActiveTab('rules')}
+            style={{
+              padding: '15px 30px',
+              fontSize: '16px',
+              backgroundColor: activeTab === 'rules' ? '#007bff' : 'transparent',
+              color: activeTab === 'rules' ? 'white' : '#007bff',
+              border: 'none',
+              cursor: 'pointer',
+              borderBottom: activeTab === 'rules' ? '3px solid #007bff' : '3px solid transparent'
+            }}
+          >
+            Rules Management
+          </button>
+        </div>
+      </div>
+
+      {activeTab === 'entity-merge' && <EntityMergeUI />}
+      {activeTab === 'rules' && <RulesTab />}
     </div>
   );
 }

@@ -1,0 +1,158 @@
+{
+	"info": {
+		"_postman_id": "mdm-entity-merge-api",
+		"name": "MDM Entity Merge API",
+		"description": "Collection for testing Reltio-style entity matching and merging using Drools rules",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Load Sample Data",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/entity-merge/sample-data",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"entity-merge",
+						"sample-data"
+					]
+				},
+				"description": "Loads 3 sample PERSON entities (2 are likely matches, 1 is unique) for testing"
+			},
+			"response": []
+		},
+		{
+			"name": "Find Match Candidates",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/entity-merge/match-candidates",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"entity-merge",
+						"match-candidates"
+					]
+				},
+				"description": "Find potential duplicate pairs based on Drools rules"
+			},
+			"response": []
+		},
+		{
+			"name": "Bulk Merge All Entities",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/entity-merge/merge-all",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"entity-merge",
+						"merge-all"
+					]
+				},
+				"description": "Run the merge engine on all entities and return merge results"
+			},
+			"response": []
+		},
+		{
+			"name": "Merge Two Entities",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/entity-merge/merge?entityId1=E1&entityId2=E2",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"entity-merge",
+						"merge"
+					],
+					"query": [
+						{
+							"key": "entityId1",
+							"value": "E1",
+							"description": "First entity ID to merge"
+						},
+						{
+							"key": "entityId2",
+							"value": "E2",
+							"description": "Second entity ID to merge"
+						}
+					]
+				},
+				"description": "Merge two specific entities and return the result"
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Entities",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/entities",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"entities"
+					]
+				},
+				"description": "Get all entities from the database"
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8080",
+			"type": "string"
+		}
+	]
+} 

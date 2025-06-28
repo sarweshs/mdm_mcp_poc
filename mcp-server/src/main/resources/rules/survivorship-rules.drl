@@ -1,0 +1,120 @@
+package com.mdm.mcp.rules;
+
+import com.mdm.mcp.model.Entity;
+import com.mdm.mcp.service.RuleExecutionContext;
+
+// Survivorship rules for determining which attributes to keep during merging
+rule "Email Survivorship - Highest Confidence"
+    when
+        $context: RuleExecutionContext()
+        $entity1: Entity(attributes["email"] != null, confidenceScore != null)
+        $entity2: Entity(attributes["email"] != null, confidenceScore != null, entityId != $entity1.entityId)
+        $mergedEntity: Entity()
+    then
+        if ($entity1.getConfidenceScore() > $entity2.getConfidenceScore()) {
+            $mergedEntity.getAttributes().put("email", $entity1.getAttributes().get("email"));
+            $context.addSurvivorshipDecision("email", $entity1.getEntityId(), "HIGHEST_CONFIDENCE");
+        } else {
+            $mergedEntity.getAttributes().put("email", $entity2.getAttributes().get("email"));
+            $context.addSurvivorshipDecision("email", $entity2.getEntityId(), "HIGHEST_CONFIDENCE");
+        }
+end
+
+rule "Phone Number Survivorship - Most Recent"
+    when
+        $context: RuleExecutionContext()
+        $entity1: Entity(attributes["phoneNumber"] != null, updatedAt != null)
+        $entity2: Entity(attributes["phoneNumber"] != null, updatedAt != null, entityId != $entity1.entityId)
+        $mergedEntity: Entity()
+    then
+        if ($entity1.getUpdatedAt().isAfter($entity2.getUpdatedAt())) {
+            $mergedEntity.getAttributes().put("phoneNumber", $entity1.getAttributes().get("phoneNumber"));
+            $context.addSurvivorshipDecision("phoneNumber", $entity1.getEntityId(), "MOST_RECENT");
+        } else {
+            $mergedEntity.getAttributes().put("phoneNumber", $entity2.getAttributes().get("phoneNumber"));
+            $context.addSurvivorshipDecision("phoneNumber", $entity2.getEntityId(), "MOST_RECENT");
+        }
+end
+
+rule "Address Survivorship - Most Complete"
+    when
+        $context: RuleExecutionContext()
+        $entity1: Entity(attributes["address"] != null)
+        $entity2: Entity(attributes["address"] != null, entityId != $entity1.entityId)
+        $mergedEntity: Entity()
+    then
+        String address1 = $entity1.getAttributes().get("address");
+        String address2 = $entity2.getAttributes().get("address");
+        
+        if (address1.length() > address2.length()) {
+            $mergedEntity.getAttributes().put("address", address1);
+            $context.addSurvivorshipDecision("address", $entity1.getEntityId(), "MOST_COMPLETE");
+        } else {
+            $mergedEntity.getAttributes().put("address", address2);
+            $context.addSurvivorshipDecision("address", $entity2.getEntityId(), "MOST_COMPLETE");
+        }
+end
+
+rule "Name Survivorship - Most Complete"
+    when
+        $context: RuleExecutionContext()
+        $entity1: Entity(attributes["fullName"] != null)
+        $entity2: Entity(attributes["fullName"] != null, entityId != $entity1.entityId)
+        $mergedEntity: Entity()
+    then
+        String name1 = $entity1.getAttributes().get("fullName");
+        String name2 = $entity2.getAttributes().get("fullName");
+        
+        if (name1.split("\\s+").length > name2.split("\\s+").length) {
+            $mergedEntity.getAttributes().put("fullName", name1);
+            $context.addSurvivorshipDecision("fullName", $entity1.getEntityId(), "MOST_COMPLETE");
+        } else {
+            $mergedEntity.getAttributes().put("fullName", name2);
+            $context.addSurvivorshipDecision("fullName", $entity2.getEntityId(), "MOST_COMPLETE");
+        }
+end
+
+rule "SSN Survivorship - Highest Confidence"
+    when
+        $context: RuleExecutionContext()
+        $entity1: Entity(attributes["ssn"] != null, confidenceScore != null)
+        $entity2: Entity(attributes["ssn"] != null, confidenceScore != null, entityId != $entity1.entityId)
+        $mergedEntity: Entity()
+    then
+        if ($entity1.getConfidenceScore() > $entity2.getConfidenceScore()) {
+            $mergedEntity.getAttributes().put("ssn", $entity1.getAttributes().get("ssn"));
+            $context.addSurvivorshipDecision("ssn", $entity1.getEntityId(), "HIGHEST_CONFIDENCE");
+        } else {
+            $mergedEntity.getAttributes().put("ssn", $entity2.getAttributes().get("ssn"));
+            $context.addSurvivorshipDecision("ssn", $entity2.getEntityId(), "HIGHEST_CONFIDENCE");
+        }
+end
+
+rule "Company Name Survivorship - Most Recent"
+    when
+        $context: RuleExecutionContext()
+        $entity1: Entity(entityType == "ORGANIZATION", attributes["companyName"] != null, updatedAt != null)
+        $entity2: Entity(entityType == "ORGANIZATION", attributes["companyName"] != null, updatedAt != null, entityId != $entity1.entityId)
+        $mergedEntity: Entity()
+    then
+        if ($entity1.getUpdatedAt().isAfter($entity2.getUpdatedAt())) {
+            $mergedEntity.getAttributes().put("companyName", $entity1.getAttributes().get("companyName"));
+            $context.addSurvivorshipDecision("companyName", $entity1.getEntityId(), "MOST_RECENT");
+        } else {
+            $mergedEntity.getAttributes().put("companyName", $entity2.getAttributes().get("companyName"));
+            $context.addSurvivorshipDecision("companyName", $entity2.getEntityId(), "MOST_RECENT");
+        }
+end
+
+rule "Relationship Survivorship - Merge All"
+    when
+        $context: RuleExecutionContext()
+        $entity1: Entity(relationships != null)
+        $entity2: Entity(relationships != null, entityId != $entity1.entityId)
+        $mergedEntity: Entity()
+    then
+        // Merge all relationships from both entities
+        $mergedEntity.getRelationships().putAll($entity1.getRelationships());
+        $mergedEntity.getRelationships().putAll($entity2.getRelationships());
+        $context.addSurvivorshipDecision("relationships", "BOTH", "MERGE_ALL");
+end 
