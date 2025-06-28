@@ -20,4 +20,12 @@ public class RuleService {
     public List<Rule> getRules(String domain) {
         return rulesByDomain.getOrDefault(domain, new ArrayList<>());
     }
+    
+    public List<Rule> getAllRules() {
+        List<Rule> allRules = new ArrayList<>();
+        for (List<Rule> domainRules : rulesByDomain.values()) {
+            allRules.addAll(domainRules);
+        }
+        return allRules;
+    }
 } 

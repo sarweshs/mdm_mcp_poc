@@ -9,6 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/rules")
+@CrossOrigin(origins = "http://localhost:3000")
 public class RuleController {
     @Autowired
     private RuleService ruleService;
@@ -16,6 +17,11 @@ public class RuleController {
     @PostMapping
     public void addRule(@RequestBody Rule rule) {
         ruleService.saveRule(rule);
+    }
+
+    @GetMapping
+    public List<Rule> getAllRules() {
+        return ruleService.getAllRules();
     }
 
     @GetMapping("/{domain}")

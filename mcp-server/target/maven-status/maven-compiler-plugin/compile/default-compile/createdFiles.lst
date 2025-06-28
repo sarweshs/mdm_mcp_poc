@@ -2,6 +2,7 @@ com/mdm/mcp/api/RuleController.class
 com/mdm/mcp/api/BotController$LifeSciencesBot.class
 com/mdm/mcp/api/MCPClientImpl.class
 com/mdm/mcp/MCPApplication.class
+com/mdm/mcp/config/CorsConfig.class
 com/mdm/mcp/service/RuleService.class
 com/mdm/mcp/api/BotController.class
 com/mdm/mcp/model/Rule.class
