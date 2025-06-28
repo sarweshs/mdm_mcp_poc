@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.mdm</groupId>
+  <artifactId>mcp-server</artifactId>
+  <version>1.0.0</version>
+  <packaging>jar</packaging>
+  
+  <parent>
+    <groupId>com.mdm</groupId>
+    <artifactId>mdm-mcp-poc</artifactId>
+    <version>1.0.0</version>
+    <relativePath>../pom.xml</relativePath>
+  </parent>
+  
+  <properties>
+    <spring-boot.version>3.2.0</spring-boot.version>
+  </properties>
+  
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-dependencies</artifactId>
+        <version>${spring-boot.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+  
+  <dependencies>  
+    <!-- Spring Boot Starters -->  
+    <dependency>  
+      <groupId>org.springframework.boot</groupId>  
+      <artifactId>spring-boot-starter-web</artifactId>  
+    </dependency>  
+    <dependency>  
+      <groupId>org.springframework.boot</groupId>  
+      <artifactId>spring-boot-starter-data-jpa</artifactId>  
+    </dependency>  
+    <dependency>  
+      <groupId>org.springframework.boot</groupId>  
+      <artifactId>spring-boot-starter-data-elasticsearch</artifactId>  
+    </dependency>  
+    <dependency>  
+      <groupId>org.springframework.boot</groupId>  
+      <artifactId>spring-boot-starter-data-redis</artifactId>  
+    </dependency>  
+    <!-- Database -->  
+    <dependency>  
+      <groupId>org.postgresql</groupId>  
+      <artifactId>postgresql</artifactId>  
+    </dependency>  
+    <!-- Rule Engine -->  
+    <dependency>  
+      <groupId>org.drools</groupId>  
+      <artifactId>drools-core</artifactId>  
+      <version>8.44.0.Final</version>  
+    </dependency>  
+    <!-- Lombok -->  
+    <dependency>  
+      <groupId>org.projectlombok</groupId>  
+      <artifactId>lombok</artifactId>  
+      <version>1.18.30</version>
+      <scope>provided</scope>  
+    </dependency>  
+    <!-- Shared Module -->
+    <dependency>
+      <groupId>com.mdm</groupId>
+      <artifactId>shared</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+  </dependencies>  
+  
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <version>${spring-boot.version}</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>repackage</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <classifier>exec</classifier>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>  

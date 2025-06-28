@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.mdm</groupId>
+  <artifactId>slack-bot</artifactId>
+  <version>1.0.0</version>
+  <packaging>jar</packaging>
+  
+  <parent>
+    <groupId>com.mdm</groupId>
+    <artifactId>mdm-mcp-poc</artifactId>
+    <version>1.0.0</version>
+    <relativePath>../pom.xml</relativePath>
+  </parent>
+  
+  <dependencies>  
+    <dependency>  
+      <groupId>com.slack.api</groupId>  
+      <artifactId>bolt</artifactId>  
+      <version>1.36.1</version>  
+    </dependency>  
+    <dependency>  
+      <groupId>com.slack.api</groupId>  
+      <artifactId>bolt-servlet</artifactId>  
+      <version>1.36.1</version>  
+    </dependency>  
+    <dependency>  
+      <groupId>com.slack.api</groupId>  
+      <artifactId>bolt-jakarta-servlet</artifactId>  
+      <version>1.36.1</version>  
+    </dependency>  
+    <dependency>  
+      <groupId>com.slack.api</groupId>  
+      <artifactId>bolt-jetty</artifactId>  
+      <version>1.36.1</version>  
+    </dependency>  
+    <!-- MCP Client -->  
+    <dependency>  
+      <groupId>com.mdm</groupId>
+      <artifactId>mcp-server</artifactId>  
+      <version>${project.version}</version>  
+    </dependency>  
+  </dependencies>  
+</project>  

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.mdm</groupId>
+  <artifactId>agentic-framework</artifactId>
+  <version>1.0.0</version>
+  <packaging>jar</packaging>
+  
+  <parent>
+    <groupId>com.mdm</groupId>
+    <artifactId>mdm-mcp-poc</artifactId>
+    <version>1.0.0</version>
+    <relativePath>../pom.xml</relativePath>
+  </parent>
+  
+  <dependencies>  
+    <!-- Rule Engine -->  
+    <dependency>  
+      <groupId>org.drools</groupId>  
+      <artifactId>drools-core</artifactId>  
+      <version>8.44.0.Final</version>
+    </dependency>  
+    <!-- Lombok -->  
+    <dependency>  
+      <groupId>org.projectlombok</groupId>  
+      <artifactId>lombok</artifactId>  
+      <version>1.18.30</version>
+      <scope>provided</scope>  
+    </dependency>  
+    <!-- Shared Module -->
+    <dependency>
+      <groupId>com.mdm</groupId>
+      <artifactId>shared</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+  </dependencies>  
+</project>  

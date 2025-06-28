@@ -1,0 +1,55 @@
+{
+    "info": {
+      "_postman_id": "a1b2c3d4-e5f6-7890",
+      "name": "ReltIO MCP PoC",
+      "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+      {
+        "name": "Add Rule",
+        "request": {
+          "method": "POST",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": {
+            "mode": "raw",
+            "raw": "{\n  \"ruleId\": \"LS_DRUG_MERGE\",\n  \"domain\": \"LifeSciences\",\n  \"condition\": \"drugName similarity > 0.9\",\n  \"action\": \"AUTO_MERGE\"\n}"
+          },
+          "url": {
+            "raw": "http://localhost:8080/rules",
+            "protocol": "http",
+            "host": ["localhost"],
+            "port": "8080",
+            "path": ["rules"]
+          }
+        }
+      },
+      {
+        "name": "Execute LifeSciencesBot",
+        "request": {
+          "method": "POST",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": {
+            "mode": "raw",
+            "raw": "{\n  \"botType\": \"LifeSciencesBot\",\n  \"input\": \"Aspirin vs Ibuprofen\"\n}"
+          },
+          "url": {
+            "raw": "http://localhost:8080/bot/execute",
+            "protocol": "http",
+            "host": ["localhost"],
+            "port": "8080",
+            "path": ["bot", "execute"]
+          }
+        }
+      }
+    ]
+  }

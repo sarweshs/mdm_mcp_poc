@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.mdm</groupId>
+  <artifactId>ui</artifactId>
+  <version>1.0.0</version>
+  <packaging>jar</packaging>
+  
+  <parent>
+    <groupId>com.mdm</groupId>
+    <artifactId>mdm-mcp-poc</artifactId>
+    <version>1.0.0</version>
+    <relativePath>../pom.xml</relativePath>
+  </parent>
+  
+  <build>  
+    <plugins>  
+      <plugin>  
+        <groupId>com.github.eirslett</groupId>  
+        <artifactId>frontend-maven-plugin</artifactId>  
+        <version>1.12.1</version>  
+        <configuration>  
+          <nodeVersion>v18.16.0</nodeVersion>  
+          <npmVersion>9.5.1</npmVersion>  
+        </configuration>  
+        <executions>  
+          <execution>  
+            <id>install-node-and-npm</id>  
+            <goals><goal>install-node-and-npm</goal></goals>  
+          </execution>  
+          <execution>  
+            <id>npm-install</id>  
+            <goals><goal>npm</goal></goals>  
+            <configuration>  
+              <arguments>install</arguments>  
+            </configuration>  
+          </execution>  
+          <execution>  
+            <id>npm-build</id>  
+            <goals><goal>npm</goal></goals>  
+            <configuration>  
+              <arguments>run build</arguments>  
+            </configuration>  
+          </execution>  
+        </executions>  
+      </plugin>  
+    </plugins>  
+  </build>  
+</project>  

@@ -1,0 +1,46 @@
+# Maven
+/target/
+!.mvn/wrapper/maven-wrapper.jar
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Eclipse
+.classpath
+.project
+.settings/
+
+# VS Code
+.vscode/
+
+# Logs
+*.log
+
+# OS generated
+.DS_Store
+Thumbs.db
+
+# Node
+ui/node_modules/
+ui/build/
+
+# Environment
+.env
+.env.*
+
+# Docker
+*.pid
+*.seed
+*.pid.lock
+
+# Misc
+*.swp
+*~
+
+# Ignore local database/data
+postgres-data/
+redis-data/
+elasticsearch-data/ 
