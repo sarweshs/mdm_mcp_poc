@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import './App.css';
 import EntityMergeUI from './components/EntityMergeUI';
+import AgentMergeUI from './components/AgentMergeUI';
 
 function App() {
-  const [activeTab, setActiveTab] = useState('entity-merge');
+  const [activeTab, setActiveTab] = useState('rules');
   const [rules, setRules] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -22,105 +24,92 @@ function App() {
     }
   };
 
-  const RulesTab = () => (
-    <div style={{ padding: '20px' }}>
-      <h1>MCP Steward Dashboard</h1>
-      <button 
-        onClick={fetchRules} 
-        disabled={loading}
-        style={{ 
-          padding: '10px 20px', 
-          fontSize: '16px',
-          backgroundColor: loading ? '#ccc' : '#007bff',
-          color: 'white',
-          border: 'none',
-          borderRadius: '5px',
-          cursor: loading ? 'not-allowed' : 'pointer'
-        }}
-      >
-        {loading ? 'Loading...' : 'Load Rules'}
-      </button>
-      
-      {error && (
-        <div style={{ 
-          color: 'red', 
-          marginTop: '10px',
-          padding: '10px',
-          backgroundColor: '#ffe6e6',
-          borderRadius: '5px'
-        }}>
-          Error: {error}
-        </div>
-      )}
-      
-      {rules.length > 0 && (
-        <div style={{ marginTop: '20px' }}>
-          <h2>Rules ({rules.length})</h2>
-          <ul style={{ listStyle: 'none', padding: 0 }}>
-            {rules.map(rule => (
-              <li key={rule.ruleId} style={{ 
-                padding: '10px', 
-                margin: '5px 0', 
-                backgroundColor: '#f8f9fa',
-                borderRadius: '5px',
-                border: '1px solid #dee2e6'
-              }}>
-                <strong>ID:</strong> {rule.ruleId} | 
-                <strong>Domain:</strong> {rule.domain} | 
-                <strong>Condition:</strong> {rule.condition} → 
-                <strong>Action:</strong> {rule.action}
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-    </div>
-  );
+  useEffect(() => {
+    fetchRules();
+  }, []);
 
   return (
-    <div>
-      <div style={{
-        backgroundColor: '#f8f9fa',
-        borderBottom: '1px solid #dee2e6',
-        padding: '0 20px'
-      }}>
-        <div style={{
-          display: 'flex',
-          gap: '0'
-        }}>
-          <button
-            onClick={() => setActiveTab('entity-merge')}
-            style={{
-              padding: '15px 30px',
-              fontSize: '16px',
-              backgroundColor: activeTab === 'entity-merge' ? '#007bff' : 'transparent',
-              color: activeTab === 'entity-merge' ? 'white' : '#007bff',
-              border: 'none',
-              cursor: 'pointer',
-              borderBottom: activeTab === 'entity-merge' ? '3px solid #007bff' : '3px solid transparent'
-            }}
-          >
-            Entity Merge
-          </button>
-          <button
-            onClick={() => setActiveTab('rules')}
-            style={{
-              padding: '15px 30px',
-              fontSize: '16px',
-              backgroundColor: activeTab === 'rules' ? '#007bff' : 'transparent',
-              color: activeTab === 'rules' ? 'white' : '#007bff',
-              border: 'none',
-              cursor: 'pointer',
-              borderBottom: activeTab === 'rules' ? '3px solid #007bff' : '3px solid transparent'
-            }}
-          >
-            Rules Management
-          </button>
-        </div>
-      </div>
+    <div className="App">
+      <header className="App-header">
+        <h1>MDM MCP POC - Master Data Management</h1>
+        <p>Entity Management and Rule Engine System</p>
+      </header>
 
-      {activeTab === 'entity-merge' && <EntityMergeUI />}
-      {activeTab === 'rules' && <RulesTab />}
+      <nav className="tab-navigation">
+        <button 
+          className={`tab-button ${activeTab === 'rules' ? 'active' : ''}`}
+          onClick={() => setActiveTab('rules')}
+        >
+          📋 Rules Management
+        </button>
+        <button 
+          className={`tab-button ${activeTab === 'entity-merge' ? 'active' : ''}`}
+          onClick={() => setActiveTab('entity-merge')}
+        >
+          🔄 Entity Merge
+        </button>
+        <button 
+          className={`tab-button ${activeTab === 'agent-merge' ? 'active' : ''}`}
+          onClick={() => setActiveTab('agent-merge')}
+        >
+          🤖 Agent-Based Merge
+        </button>
+      </nav>
+
+      <main className="tab-content">
+        {activeTab === 'rules' && (
+          <div className="rules-management">
+            <h2>Rules Management</h2>
+            <div className="rules-controls">
+              <button onClick={fetchRules} disabled={loading} className="load-rules-btn">
+                {loading ? 'Loading...' : 'Load Rules'}
+              </button>
+            </div>
+            
+            {error && (
+              <div className="error-message">
+                <h3>Error</h3>
+                <p>{error}</p>
+              </div>
+            )}
+            
+            {loading && <div className="loading">Loading rules...</div>}
+            
+            {!loading && !error && (
+              <div className="rules-list">
+                <h3>Current Rules ({rules.length})</h3>
+                {rules.length === 0 ? (
+                  <p>No rules found. Use the "Load Rules" button to fetch rules from the server.</p>
+                ) : (
+                  <ul>
+                    {rules.map((rule, index) => (
+                      <li key={index} className="rule-item">
+                        <strong>Rule ID:</strong> {rule.ruleId}<br />
+                        <strong>Domain:</strong> {rule.domain}<br />
+                        <strong>Condition:</strong> {rule.condition}<br />
+                        <strong>Action:</strong> {rule.action}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            )}
+          </div>
+        )}
+
+        {activeTab === 'entity-merge' && (
+          <EntityMergeUI />
+        )}
+
+        {activeTab === 'agent-merge' && (
+          <AgentMergeUI />
+        )}
+      </main>
+
+      <footer className="App-footer">
+        <p>MDM MCP POC - Master Data Management System</p>
+        <p>Built with Spring Boot, React, and Drools</p>
+      </footer>
     </div>
   );
 }
